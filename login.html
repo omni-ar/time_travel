@@ -46,7 +46,7 @@
           const email = document.getElementById("email").value;
           const password = document.getElementById("password").value;
 
-          const res = await fetch("/api/auth/login", {
+          const res = await fetch("https://time-travel-backend.onrender.com/api/auth/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password }),
@@ -68,7 +68,7 @@
         });
       function handleGoogleResponse(response) {
         // Google returns id_token
-        fetch("/api/auth/google-login", {
+        fetch("https://time-travel-backend.onrender.com/api/auth/google-login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ id_token: response.credential }),

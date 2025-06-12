@@ -49,7 +49,7 @@
   <script>
     async function fetchMessages() {
       try {
-        const res = await fetch("/api/contact/all"); // Backend route
+        const res = await fetch("https://time-travel-backend.onrender.com/api/contact/all"); // Backend route
         const messages = await res.json();
 
         const tbody = document.getElementById("messageBody");
