@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Upgrade to Premium</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      body {
+        background: linear-gradient(120deg, #1a1a2e 0%, #ffd70011 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Orbitron", Arial, sans-serif;
+      }
+      .payment-card {
+        background: rgba(30, 30, 60, 0.95);
+        border-radius: 22px;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37), 0 0 0 4px #ffd70044;
+        padding: 2.5rem 2rem 2rem 2rem;
+        max-width: 350px;
+        width: 100%;
+        text-align: center;
+        border: 2px solid #ffd70088;
+        backdrop-filter: blur(8px);
+        animation: premiumGlow 3s infinite alternate;
+      }
+      .payment-card h2 {
+        color: #ffd700;
+        font-size: 1.7rem;
+        font-weight: 800;
+        margin-bottom: 2rem;
+        text-shadow: 0 0 12px #ffd70088, 0 2px 8px #000a;
+      }
+      #payBtn {
+        background: linear-gradient(90deg, #ffd700, #ffae00 80%);
+        color: #222;
+        font-weight: 700;
+        font-size: 1.1rem;
+        border: none;
+        border-radius: 25px;
+        padding: 0.9rem 2.2rem;
+        box-shadow: 0 0 18px #ffd70088;
+        cursor: pointer;
+        transition: background 0.3s, box-shadow 0.3s, transform 0.2s;
+        margin-top: 1.5rem;
+      }
+      #payBtn:hover,
+      #payBtn:focus {
+        background: linear-gradient(90deg, #fff8dc, #ffd700 80%);
+        color: #111;
+        box-shadow: 0 0 36px #ffd700cc, 0 0 16px 4px #fff8dc;
+        transform: translateY(-3px) scale(1.04);
+      }
+      @keyframes premiumGlow {
+        0% {
+          box-shadow: 0 0 18px #ffd70044;
+        }
+        50% {
+          box-shadow: 0 0 36px #ffd700cc;
+        }
+        100% {
+          box-shadow: 0 0 18px #ffd70044;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="payment-card">
+      <h2>
+        Upgrade to Premium<br /><span style="font-size: 1.1rem; color: #fff8dc"
+          >Only ₹100</span
+        >
+      </h2>
+      <button id="payBtn">Pay Now</button>
+    </div>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+      document.getElementById("payBtn").onclick = async () => {
+        const token = localStorage.getItem("token");
+
+        const orderRes = await fetch("/api/payment/create-order", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = await orderRes.json();
+        console.log(data); // See the full response
+
+        if (!data.order || !data.order.id || !data.order.amount) {
+          alert("Order creation failed: " + (data.message || "Unknown error"));
+          return;
+        }
+
+        const order = data.order;
+
+        const options = {
+          key: "rzp_test_H06MPLktskB0w6", // Your Razorpay test key
+          amount: order.amount,
+          currency: order.currency,
+          name: "Time Travel Web",
+          order_id: order.id,
+          handler: async function (response) {
+            const verifyRes = await fetch("/api/payment/verify", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify(response),
+            });
+            const data = await verifyRes.json();
+            alert(data.message);
+            window.location.href = "diary.html";
+          },
+        };
+
+        const rzp1 = new Razorpay(options);
+        rzp1.open();
+      };
+    </script>
+  </body>
+</html>

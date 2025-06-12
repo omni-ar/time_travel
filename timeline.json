@@ -1,0 +1,20 @@
+{
+  "1984": {
+    "global": ["The Apple Macintosh was released."],
+    "culture": ["Popular movies: 'Ghostbusters', 'The Terminator'."],
+    "science": ["DNA profiling was invented."],
+    "art": ["Street art gained popularity."]
+  },
+  "1492": {
+    "global": ["Christopher Columbus discovered America."],
+    "culture": ["Renaissance art flourished in Europe."],
+    "science": ["Advancements in navigation techniques."],
+    "art": ["Leonardo da Vinci painted 'Mona Lisa'."]
+  },
+  "2024": {
+    "global": ["Mars exploration missions continue."],
+    "culture": ["Streaming platforms dominate entertainment."],
+    "science": ["Advances in AI and quantum computing."],
+    "art": ["Digital art and NFTs rise."]
+  }
+}

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Panel – Time Travel</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    table {
+      width: 90%;
+      margin: 2rem auto;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 12px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+    th {
+      background-color: #333;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="logo">Admin Panel</div>
+    </nav>
+  </header>
+
+  <section class="container">
+    <h2 style="text-align:center;">Contact Messages</h2>
+    <table id="messageTable">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Message</th>
+          <th>Submitted At</th>
+        </tr>
+      </thead>
+      <tbody id="messageBody">
+        <!-- Messages will load here -->
+      </tbody>
+    </table>
+  </section>
+
+  <script>
+    async function fetchMessages() {
+      try {
+        const res = await fetch("/api/contact/all"); // Backend route
+        const messages = await res.json();
+
+        const tbody = document.getElementById("messageBody");
+        tbody.innerHTML = "";
+
+        messages.forEach((msg) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${msg.name}</td>
+            <td>${msg.email}</td>
+            <td>${msg.message}</td>
+            <td>${msg.createdAt ? new Date(msg.createdAt).toLocaleString() : ''}</td>
+          `;
+          tbody.appendChild(row);
+        });
+      } catch (error) {
+        alert("Failed to load messages.");
+      }
+    }
+
+    fetchMessages();
+  </script>
+</body>
+</html>

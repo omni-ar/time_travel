@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- Background Canvas for Starfield -->
+    <canvas id="starfield"></canvas>
+    <div class="time-rings"></div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gallery – Time Travel Web</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="gallery-page">
+    <!-- Header -->
+    <header>
+      <nav class="navbar">
+        <div class="logo">Time Travel</div>
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link active">Home</a></li>
+          <li><a href="explore.html" class="nav-link">Explore</a></li>
+          <li><a href="gallery.html" class="nav-link">Gallery</a></li>
+          <li><a href="about.html" class="nav-link">About</a></li>
+          <li><a href="contact.html" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <!-- Gallery Title -->
+    <section class="gallery-intro">
+      <div class="container">
+        <h2>Timelines in Visuals</h2>
+        <p>
+          Scroll through visuals from different centuries — AI-generated
+          snapshots of history and the future.
+        </p>
+      </div>
+    </section>
+
+    <!-- Image Grid Section -->
+    <section class="gallery-grid-section">
+      <div class="container gallery-grid">
+        <div class="gallery-item">
+          <img src="assets/medieval.png" alt="Medieval Castle" />
+          <p>Year: 1250 – Life in a Medieval Castle</p>
+        </div>
+        <div class="gallery-item">
+          <img src="assets/renaisance.png" alt="Renaissance Art" />
+          <p>Year: 1500 – The Rise of Renaissance Art</p>
+        </div>
+        <div class="gallery-item">
+          <img
+            src="assets/industrial.png"
+            alt="Industrial Revolution City"
+          />
+          <p>Year: 1850 – Industrial Revolution Urban Life</p>
+        </div>
+        <div class="gallery-item">
+          <img src="assets/scifi.png" alt="Retro Future" style="height: fit-content;" />
+          <p>Year: 2050 – Futuristic Retro Sci-Fi World</p>
+        </div>
+        <div class="gallery-item">
+          <img
+            src="assets/interstellar.png"
+            alt="Interstellar Travel" style="height: 500px;"
+          />
+          <p>Year: 3000 – Interstellar Civilization</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+      <p>&copy; 2025 Time Travel Web. All rights reserved.</p>
+    </footer>
+    <!-- === Theme Toggle Button === -->
+        <div id="theme-toggle" class="theme-toggle">
+        <span id="theme-icon">🌙</span>
+        </div>
+    <script src="script.js"></script>
+    
+  </body>
+</html>

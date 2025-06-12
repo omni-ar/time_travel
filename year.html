@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Timeline Year View</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      .container {
+        max-width: 900px;
+        margin: auto;
+        text-align: center;
+      }
+      h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+      }
+      h2 {
+        margin-top: 1.5rem;
+        color: #00bfff;
+      }
+      p {
+        text-align: center;
+      }
+      img {
+        max-width: 100%;
+        height: auto;
+        border: 3px solid #0ff;
+        border-radius: 10px;
+        margin: 1rem 0;
+        display: none;
+      }
+      iframe {
+        width: 100%;
+        height: 400px;
+        border: none;
+        margin-top: 1rem;
+        display: none;
+      }
+      .back-btn {
+        margin-top: 2rem;
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #0ff;
+        color: #000;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: bold;
+      }
+      .back-btn:hover {
+        background-color: #0cc;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1 id="title">Loading...</h1>
+
+      <div id="desc-container">
+        <!-- Dynamic sub-sections will be inserted here -->
+      </div>
+
+      <img id="image" src="" alt="Year related image" />
+      <iframe id="video" src="" allowfullscreen></iframe>
+      <a href="explore.html" class="back-btn">🔙 Back to Explore</a>
+    </div>
+
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      const year = urlParams.get("year");
+
+      async function fetchYearData() {
+        try {
+          const res = await fetch(`http://localhost:5000/api/timeline/${year}`);
+          if (!res.ok) throw new Error("No data found");
+          const data = await res.json();
+
+          // Title
+          document.getElementById("title").textContent =
+            data.title || `Events of Year ${year}`;
+
+          // Description (with subheadings)
+          const descContainer = document.getElementById("desc-container");
+          const desc = data.description || {};
+
+          const sections = [
+            { key: "Global Events", label: "🌍 Global Events" },
+            { key: "Culture And Lifestyle", label: "🎭 Culture and Lifestyle" },
+            { key: "Science And Technology", label: "🔬 Science and Technology" },
+            { key: "Artistic Movements", label: "🎨 Artistic Movements" },
+          ];
+
+          sections.forEach((section) => {
+            if (desc[section.key]) {
+              const heading = document.createElement("h2");
+              heading.textContent = section.label;
+              const para = document.createElement("p");
+              para.textContent = desc[section.key];
+              descContainer.appendChild(heading);
+              descContainer.appendChild(para);
+            }
+          });
+
+          // Image
+          if (data.imageUrl) {
+            const img = document.getElementById("image");
+            img.src = data.imageUrl;
+            img.style.display = "block";
+          }
+
+          // Video
+          if (data.videoUrl) {
+            const vid = document.getElementById("video");
+            vid.src = data.videoUrl;
+            vid.style.display = "block";
+          }
+        } catch (err) {
+          document.querySelector(".container").innerHTML = `
+            <h1>No Data Found for ${year}</h1>
+            <a href="explore.html" class="back-btn">🔙 Back to Explore</a>
+          `;
+        }
+      }
+
+      fetchYearData();
+    </script>
+  </body>
+</html>

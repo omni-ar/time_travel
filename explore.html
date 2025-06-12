@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Explore Timeline – Time Travel Web</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
+    <script src="script.js"></script>
+  </head>
+  <body class="explore-page">
+    <!-- Background Canvas for Starfield -->
+    <canvas id="starfield"></canvas>
+    <div class="time-rings"></div>
+    <!-- Header -->
+    <header>
+      <nav class="navbar">
+        <div class="logo">Time Travel</div>
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link active">Home</a></li>
+          <li><a href="explore.html" class="nav-link">Explore</a></li>
+          <li><a href="gallery.html" class="nav-link">Gallery</a></li>
+          <li><a href="about.html" class="nav-link">About</a></li>
+          <li><a href="contact.html" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <!-- Input Section -->
+    <section class="input-section">
+      <h2>Where do you want to go?</h2>
+      <p>
+        Enter a century between 1000 AD and 2000 AD to explore timeline events.
+      </p>
+      <div class="year-input-group">
+        <input
+          type="number"
+          id="yearInput"
+          placeholder="Enter Century (e.g., 1100)"
+        />
+        <button id="exploreButton">Explore</button>
+      </div>
+    </section>
+    <section class="timeline-scroll-section">
+      <h2 class="timeline-title">Explore Timeline</h2>
+      <div class="timeline-scroll-container" id="timeline-scroll">
+        <!-- Year nodes will be injected here dynamically -->
+      </div>
+    </section>
+    <!-- Timeline Preview Section -->
+    <section class="timeline-preview">
+      <div class="container timeline-grid">
+        <div class="timeline-card">
+          <h3>🗓️ Global Events</h3>
+          <p>
+            Wars, revolutions, peace treaties, and major historical moments.
+          </p>
+        </div>
+        <div class="timeline-card">
+          <h3>🎭 Culture & Lifestyle</h3>
+          <p>
+            Art, fashion, music, movies and everyday life of the chosen year.
+          </p>
+        </div>
+        <div class="timeline-card">
+          <h3>🧪 Science & Technology</h3>
+          <p>Major scientific discoveries and technological breakthroughs.</p>
+        </div>
+        <div class="timeline-card">
+          <h3>🧑‍🎨 Artistic Movements</h3>
+          <p>
+            Dominant art styles, literature, and creative trends of the time.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+      <p>&copy; 2025 Time Travel Web. All rights reserved.</p>
+    </footer>
+
+    <!-- === Theme Toggle Button === -->
+    <div id="theme-toggle" class="theme-toggle">
+      <span id="theme-icon">🌙</span>
+    </div>
+
+    <!-- Anant Trigger Button (bottom-left) -->
+    <div
+      id="anant-button"
+      style="
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        background: #222;
+        color: #0ff;
+        font-weight: bold;
+        padding: 12px 18px;
+        border-radius: 30px;
+        cursor: pointer;
+        box-shadow: 0 0 12px #0ff;
+        user-select: none;
+        z-index: 9999;
+        font-family: 'Orbitron', sans-serif;
+      "
+    >
+      🕰️ Anant
+    </div>
+
+    <!-- 3D Clock Container (hidden initially) -->
+    <div
+      id="anant-clock-container"
+      style="
+        position: fixed;
+        bottom: 80px;
+        left: 20px;
+        width: 320px;
+        height: 320px;
+        background: radial-gradient(ellipse at center, #0ff2 15%, #0000 80%);
+        border: 2px solid #0ff;
+        border-radius: 50%;
+        box-shadow: 0 0 20px #0ff88;
+        display: none;
+        user-select: none;
+        z-index: 9998;
+      "
+    ></div>
+
+    <!-- Speech Bubble -->
+    <div
+      id="anant-speech"
+      style="
+        position: fixed;
+        bottom: 410px;
+        left: 50px;
+        max-width: 280px;
+        background: #0ff8;
+        border-radius: 15px;
+        padding: 15px 20px;
+        font-family: 'Orbitron', sans-serif;
+        font-weight: 600;
+        color: #003;
+        box-shadow: 0 0 12px #0ff;
+        display: none;
+        z-index: 10000;
+        user-select: none;
+      "
+    >
+      Where do you want to go? Enter a year and explore your timeline.
+    </div>
+    
+    <script>
+      // Generate year nodes dynamically
+      const timeline = document.getElementById("timeline-scroll");
+      for (let year = 1000; year <= 2000; year += 100) {
+        const yearEl = document.createElement("div");
+        yearEl.className = "year-node";
+        yearEl.textContent = year;
+        yearEl.onclick = () => {
+          window.location.href = `year.html?year=${year}`;
+        };
+        timeline.appendChild(yearEl);
+      }
+      // Explore button click: redirect to year.html with the entered year
+      document.getElementById("exploreButton").addEventListener("click", () => {
+        const year = document.getElementById("yearInput").value.trim();
+        if (year && !isNaN(year)) {
+          window.location.href = `year.html?year=${year}`;
+        } else {
+          alert("Please enter a valid year.");
+        }
+      });
+      // === Anant 3D Clock with Three.js ===
+
+      let clockVisible = false;
+      const anantBtn = document.getElementById("anant-button");
+      const clockContainer = document.getElementById("anant-clock-container");
+      const speechBubble = document.getElementById("anant-speech");
+
+      // Show/hide clock & speech
+      anantBtn.addEventListener("click", () => {
+        clockVisible = !clockVisible;
+        clockContainer.style.display = clockVisible ? "block" : "none";
+        speechBubble.style.display = clockVisible ? "block" : "none";
+      });
+
+      // Three.js scene setup
+      const scene = new THREE.Scene();
+
+      // Camera
+      const camera = new THREE.PerspectiveCamera(
+        45,
+        1, // square aspect ratio for container 320x320
+        0.1,
+        1000
+      );
+      camera.position.z = 5;
+
+      // Renderer
+      const renderer = new THREE.WebGLRenderer({
+        alpha: true,
+        antialias: true,
+      });
+      renderer.setSize(320, 320);
+      clockContainer.appendChild(renderer.domElement);
+
+      // Clock base (disk)
+      const clockBaseGeometry = new THREE.CylinderGeometry(1.4, 1.4, 0.2, 64);
+      const clockBaseMaterial = new THREE.MeshStandardMaterial({
+        color: 0x00ffff,
+        metalness: 0.7,
+        roughness: 0.1,
+        emissive: 0x00ffff,
+        emissiveIntensity: 0.4,
+      });
+      const clockBase = new THREE.Mesh(clockBaseGeometry, clockBaseMaterial);
+      clockBase.rotation.x = Math.PI / 2;
+      scene.add(clockBase);
+
+      // Clock face (transparent glass)
+      const glassGeometry = new THREE.CircleGeometry(1.38, 64);
+      const glassMaterial = new THREE.MeshPhysicalMaterial({
+        color: 0x00ffff,
+        transparent: true,
+        opacity: 0.15,
+        roughness: 0.1,
+        metalness: 0.5,
+        clearcoat: 1,
+        clearcoatRoughness: 0.1,
+        reflectivity: 0.8,
+      });
+      const clockGlass = new THREE.Mesh(glassGeometry, glassMaterial);
+      clockGlass.position.z = 0.11;
+      scene.add(clockGlass);
+
+      // Hour marks (small boxes around circle)
+      const hourMarks = new THREE.Group();
+      const markGeometry = new THREE.BoxGeometry(0.1, 0.03, 0.05);
+      const markMaterial = new THREE.MeshStandardMaterial({
+        color: 0x00ffff,
+        emissive: 0x00ffff,
+        emissiveIntensity: 0.8,
+      });
+      for (let i = 0; i < 12; i++) {
+        const mark = new THREE.Mesh(markGeometry, markMaterial);
+        const angle = (i / 12) * Math.PI * 2;
+        mark.position.set(Math.cos(angle) * 1.25, Math.sin(angle) * 1.25, 0.12);
+        mark.rotation.z = -angle;
+        hourMarks.add(mark);
+      }
+      scene.add(hourMarks);
+
+      // Clock hands group
+      const hands = new THREE.Group();
+
+      // Hour hand
+      const hourHandGeometry = new THREE.BoxGeometry(0.5, 0.08, 0.05);
+      const hourHandMaterial = new THREE.MeshStandardMaterial({
+        color: 0x00ffff,
+        emissive: 0x00ffff,
+        emissiveIntensity: 1,
+        metalness: 0.6,
+        roughness: 0.2,
+      });
+      const hourHand = new THREE.Mesh(hourHandGeometry, hourHandMaterial);
+      hourHand.position.x = 0.25;
+      hourHand.position.z = 0.15;
+      hands.add(hourHand);
+
+      // Minute hand
+      const minuteHandGeometry = new THREE.BoxGeometry(0.8, 0.05, 0.05);
+      const minuteHandMaterial = new THREE.MeshStandardMaterial({
+        color: 0x00ffff,
+        emissive: 0x00ffff,
+        emissiveIntensity: 1,
+        metalness: 0.6,
+        roughness: 0.2,
+      });
+      const minuteHand = new THREE.Mesh(minuteHandGeometry, minuteHandMaterial);
+      minuteHand.position.x = 0.4;
+      minuteHand.position.z = 0.16;
+      hands.add(minuteHand);
+
+      // Second hand (thin)
+      const secondHandGeometry = new THREE.BoxGeometry(0.9, 0.015, 0.02);
+      const secondHandMaterial = new THREE.MeshStandardMaterial({
+        color: 0xff0040,
+        emissive: 0xff0040,
+        emissiveIntensity: 2,
+        metalness: 0.9,
+        roughness: 0.1,
+      });
+      const secondHand = new THREE.Mesh(secondHandGeometry, secondHandMaterial);
+      secondHand.position.x = 0.45;
+      secondHand.position.z = 0.17;
+      hands.add(secondHand);
+
+      scene.add(hands);
+
+      // Center pin
+      const pinGeometry = new THREE.CylinderGeometry(0.05, 0.05, 0.08, 32);
+      const pinMaterial = new THREE.MeshStandardMaterial({
+        color: 0x00ffff,
+        emissive: 0x00ffff,
+        emissiveIntensity: 2,
+      });
+      const pin = new THREE.Mesh(pinGeometry, pinMaterial);
+      pin.position.z = 0.18;
+      scene.add(pin);
+
+      // Lights
+      const ambientLight = new THREE.AmbientLight(0x44ffff, 0.4);
+      scene.add(ambientLight);
+
+      const pointLight1 = new THREE.PointLight(0x00ffff, 1);
+      pointLight1.position.set(5, 5, 5);
+      scene.add(pointLight1);
+
+      const pointLight2 = new THREE.PointLight(0x00ffff, 0.6);
+      pointLight2.position.set(-5, -5, 5);
+      scene.add(pointLight2);
+
+      // Animate clock hands by current time
+      function animate() {
+        requestAnimationFrame(animate);
+
+        const now = new Date();
+        const seconds = now.getSeconds() + now.getMilliseconds() / 1000;
+        const minutes = now.getMinutes() + seconds / 60;
+        const hours = (now.getHours() % 12) + minutes / 60;
+
+        // Rotate hands accordingly
+        hourHand.rotation.z = -hours * (Math.PI / 6); // 360/12 = 30 deg = π/6
+        minuteHand.rotation.z = -minutes * (Math.PI / 30); // 360/60 = 6 deg = π/30
+        secondHand.rotation.z = -seconds * (Math.PI / 30);
+
+        // Slight slow rotation of entire clock base for effect
+        clockBase.rotation.z += 0.0015;
+        clockGlass.rotation.z += 0.0015;
+        hourMarks.rotation.z += 0.0015;
+        hands.rotation.z += 0.0015;
+        pin.rotation.z += 0.0015;
+
+        renderer.render(scene, camera);
+      }
+      animate();
+    </script>
+  </body>
+</html>

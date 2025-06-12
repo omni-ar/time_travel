@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact – Time Travel Web</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="contact-page">
+    <!-- Background Canvas for Starfield -->
+    <canvas id="starfield"></canvas>
+    <div class="time-rings"></div>
+    <!-- Header -->
+    <header>
+      <nav class="navbar">
+        <div class="logo">Time Travel</div>
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link active">Home</a></li>
+          <li><a href="explore.html" class="nav-link">Explore</a></li>
+          <li><a href="gallery.html" class="nav-link">Gallery</a></li>
+          <li><a href="about.html" class="nav-link">About</a></li>
+          <li><a href="contact.html" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <!-- Contact Section -->
+    <section class="contact-intro">
+      <div class="container">
+        <h2>Contact Us</h2>
+        <p>
+          If you have feedback, ideas, or collaboration queries, feel free to
+          reach out!
+        </p>
+      </div>
+    </section>
+
+    <!-- Contact Form -->
+    <section class="contact-form-section">
+      <div class="container">
+        <form class="contact-form" id="contactForm">
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name" required />
+
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" required />
+
+          <label for="message">Message:</label>
+          <textarea id="message" name="message" rows="5" required></textarea>
+
+          <button type="submit" class="btn btn-primary ripple">
+            Send Message
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+      <p>&copy; 2025 Time Travel Web. Let's build the future together.</p>
+      <div class="social-links">
+        <a
+          href="https://www.linkedin.com/in/arjit-tripathi-213b4a292/"
+          target="_blank"
+          aria-label="LinkedIn"
+        >
+          <img src="assets/linkedin.png" alt="LinkedIn" class="social-icon" />
+        </a>
+        <a
+          href="https://www.instagram.com/arjittripathi_"
+          target="_blank"
+          aria-label="Instagram"
+        >
+          <img src="assets/insta.png" alt="Instagram" class="social-icon" />
+        </a>
+      </div>
+    </footer>
+    <!-- === Theme Toggle Button === -->
+    <div id="theme-toggle" class="theme-toggle">
+      <span id="theme-icon">🌙</span>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("contactForm");
+        if (!form) {
+          console.error("No form with id 'contactForm' found!");
+          return;
+        }
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const name = document.getElementById("name").value.trim();
+          const email = document.getElementById("email").value.trim();
+          const message = document.getElementById("message").value.trim();
+
+          console.log({ name, email, message }); // Debug: See values in console
+
+          if (!name || !email || !message) {
+            alert("Please fill all fields.");
+            return;
+          }
+
+          const res = await fetch("/api/contact/submit", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ name, email, message }),
+          });
+
+          const data = await res.json();
+          alert(data.message);
+          form.reset();
+        });
+      });
+    </script>
+  </body>
+</html>
