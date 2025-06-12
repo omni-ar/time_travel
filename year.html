@@ -71,7 +71,7 @@
 
       async function fetchYearData() {
         try {
-          const res = await fetch(`http://localhost:5000/api/timeline/${year}`);
+          const res = await fetch(`https://time-travel-backend.onrender.com/api/timeline/${year}`);
           if (!res.ok) throw new Error("No data found");
           const data = await res.json();
 
