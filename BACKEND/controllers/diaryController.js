@@ -48,7 +48,7 @@ exports.uploadMedia = upload.array('media', 5); // middleware for route
 exports.editDiaryEntry = async (req, res) => {
   try {
     const { entry, year } = req.body;
-    const diary = await Diary.findOne({ _id: req.params.id, user: req.user._id });
+    const diary = await Diary.findOne({ _id: req.params.id, user: req.user });
 
     if (!diary) return res.status(404).json({ message: 'Diary entry not found' });
 
@@ -66,7 +66,7 @@ exports.deleteDiaryEntry = async (req, res) => {
   try {
     const diary = await Diary.findOneAndDelete({
       _id: req.params.id,
-      user: req.user._id,
+      user: req.user,
     });
 
     if (!diary) return res.status(404).json({ message: 'Diary not found' });

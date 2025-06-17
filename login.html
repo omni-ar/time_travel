@@ -46,11 +46,14 @@
           const email = document.getElementById("email").value;
           const password = document.getElementById("password").value;
 
-          const res = await fetch("https://time-travel-backend.onrender.com/api/auth/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password }),
-          });
+          const res = await fetch(
+            "https://time-travel-backend.onrender.com/api/auth/login",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email, password }),
+            }
+          );
 
           const data = await res.json();
           if (res.ok) {
@@ -68,17 +71,24 @@
         });
       function handleGoogleResponse(response) {
         // Google returns id_token
-        fetch("https://time-travel-backend.onrender.com/api/auth/google-login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ id_token: response.credential }),
-        })
+        fetch(
+          "https://time-travel-backend.onrender.com/api/auth/google-login",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id_token: response.credential }),
+          }
+        )
           .then((res) => res.json())
           .then((data) => {
             if (data.token) {
               localStorage.setItem("token", data.token);
               alert("Logged in via Google!");
-              window.location.href = "diary.html";
+              if (data.user && data.user.isPremium) {
+                window.location.href = "diary.html";
+              } else {
+                window.location.href = "payment.html";
+              }
             } else {
               alert("Login failed: " + data.message);
             }
